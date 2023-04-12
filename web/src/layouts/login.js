@@ -22,6 +22,7 @@ const validateEmail = (email) => {
 };
 
 export default function LayoutLogin() {
+    const [error, setError] = useState(null);
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const navigate = useNavigate();
@@ -42,11 +43,13 @@ export default function LayoutLogin() {
 
     const loginUser = () => {
         if (validateEmail(email) === null) {
+            setError("Invalid email format");
             return
         }
 
         LoginUser(email, password).then(data => {
             if (data.token === null) {
+                setError("Incorrect email or password");
                 navigate("/register");
                 navigate(0)
             } else {
@@ -100,6 +103,7 @@ export default function LayoutLogin() {
                     </Grid>
                     <Grid item style={st.center}>
                         <Button variant="contained" onClick={loginUser}>Login</Button>
+                        {error && <div style={{ color: "red" }}>{error}</div>}
                     </Grid>
                 </Grid>
                 <Grid item style={{ width: '100%', height: '30%' }} >
